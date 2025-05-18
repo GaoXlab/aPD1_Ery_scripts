@@ -88,7 +88,10 @@ colnames(APC@meta.data)[length(colnames(APC@meta.data))] <- 'MDSC'
 Idents(APC) = APC$celltype
 # Idents(APC) = factor(APC$seurat_clusters, levels=c(12,6,13,3,9,4,11,5,8,14,2,10,7,1,0))
 a <- VlnPlot(APC, features='MDSC', pt.size=0.03)
-APC_mono = subset(APC, idents=c("CD16+ Mono","CD14+ APC","CD14+ NFKB1+ Mono"))#,8,4,13,0,1,3,6,14
+Idents(APC) = "sample_label"
+APC_patient = subset(APC, idents=c("P1_3_baseline","P1_3_C3D1"))
+Idents(APC_patient) = "celltype"
+APC_mono = subset(APC_patient, idents=c("CD16+ Mono","CD14+ APC","CD14+ NFKB1+ Mono"))#,8,4,13,0,1,3,6,14
 Idents(APC_mono) = factor(APC_mono$celltype, levels=c("CD14+ APC","CD16+ Mono","CD14+ NFKB1+ Mono"))
 a_cd14 <- VlnPlot(APC_mono, features='MDSC', pt.size=0)+ scale_fill_manual(values=c("#C6DBEF","#9ECAE1","#6BAED6","#4292C6","#08519C")) #scale_fill_brewer(palette="Blues")
 ggsave('MDSC_scoring.pdf',a_cd14, width=4.5, height=4)
