@@ -133,15 +133,16 @@ p1_data$celltype = dplyr::case_when(
   p1_data$meta40 %in% c(27,28,34) ~ "NK",
   p1_data$meta40 %in% c(30,38) ~ "DC",
   p1_data$meta40 %in% c(35,39,20) ~ "Monocyte",
-  p1_data$meta40 %in% c(40) ~ "PMN-MDCS",
+  p1_data$meta40 %in% c(40) ~ "PMN-MDSC",
   p1_data$meta40 %in% c(36,4) ~ "M-MDSC",
   p1_data$meta40 %in% c(29) ~ "RP Macrophage",
   p1_data$meta40 %in% c(1,16,24) ~ "Unknown")
 table(p1_data$celltype)
-p1_data$celltype=factor(p1_data$celltype, levels=c("B","CD4 Naïve","CD4 Te","CD4 Tem","CD4 Tcm","Central Treg","Effector Treg","CD8 Naïve","CD8 Te","CD8 Tem","CD8 Tcm","RP Macrophage","Monocyte","DC","M-MDSC","PMN-MDCS","NK","Unknown","DP T"))
+p1_data$celltype=factor(p1_data$celltype, levels=c("B","CD4 Naïve","CD4 Te","CD4 Tem","CD4 Tcm","Central Treg","Effector Treg","CD8 Naïve","CD8 Te","CD8 Tem","CD8 Tcm","RP Macrophage","Monocyte","DC","M-MDSC","PMN-MDSC","NK","Unknown","DP T"))
 mini_mpg <- c(); for(i in names(table(p1_data$celltype))){ mini_mpg <- rbind(mini_mpg, head(p1_data[p1_data$celltype==i,],1))}
 p <- ggplot(p1_data, aes(x, y, color = celltype))+geom_point(size=0.03)+
     scale_color_manual(values=c(rev(pal_nejm(alpha = 0.04)(7)), pal_npg("nrc", alpha = 0.04)(9), '#7E6148E5', '#B09C85E5', 'grey'))+theme_bw()+
     ggrepel::geom_text_repel(data = mini_mpg, aes(label = celltype), colour='black', size=3.5)
 ggsave(str_c('Fig1.Anno_ClustersTSNE.',dtVar,'.pdf'), p, width=5.6, height=3.8)
 write.table(table(p1_data$celltype,p1_data$sample_id),'cytof_cellsinsample.csv',sep=',')
+
