@@ -144,5 +144,7 @@ p <- ggplot(p1_data, aes(x, y, color = celltype))+geom_point(size=0.03)+
     scale_color_manual(values=c(rev(pal_nejm(alpha = 0.04)(7)), pal_npg("nrc", alpha = 0.04)(9), '#7E6148E5', '#B09C85E5', 'grey'))+theme_bw()+
     ggrepel::geom_text_repel(data = mini_mpg, aes(label = celltype), colour='black', size=3.5)
 ggsave(str_c('Fig1.Anno_ClustersTSNE.',dtVar,'.pdf'), p, width=5.6, height=3.8)
-write.table(table(p1_data$celltype,p1_data$sample_id),'cytof_cellsinsample.csv',sep=',')
+write.table(table(p1_data$celltype,p1_data$sample_id),str_c('cytof_cellsinsample',dtVar,'.csv'),sep=',')
 
+
+sessionInfo()
