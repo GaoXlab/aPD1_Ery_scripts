@@ -3,6 +3,9 @@ library(optparse)
 library(dplyr)
 library(Seurat)
 library(stringr)
+library(DoubletFinder)
+library(cowplot)
+library(ggplot2)
 
 option_list = list(
     make_option(c("-w", "--work_path"), type = "character", default = "/", help = "File path (path of output dataset)"),
@@ -93,8 +96,8 @@ single_sample_dedoublet <- function(inputfile, sample_label, nFeature_RNA_upper_
 
     ## Run DoubletFinder with varying classification stringencies ----------------------------------------------------------------
     pbmc <- doubletFinder_v3(pbmc, PCs = 1:20, pN = 0.25, pK = 0.09, nExp = nExp_poi, reuse.pANN = FALSE, sct = FALSE)
-	filer_DFname = colnames(pbmc@meta.data)[grep('DF', colnames(pbmc@meta.data))]
-    pbmc <- doubletFinder_v3(pbmc, PCs = 1:20, pN = 0.25, pK = 0.09, nExp = nExp_poi.adj, reuse.pANN = filer_DFname, sct = FALSE)
+	# filer_DFname = colnames(pbmc@meta.data)[grep('DF', colnames(pbmc@meta.data))]
+    # pbmc <- doubletFinder_v3(pbmc, PCs = 1:20, pN = 0.25, pK = 0.09, nExp = nExp_poi.adj, reuse.pANN = filer_DFname, sct = FALSE)
     name = colnames(pbmc@meta.data)[ncol(pbmc@meta.data)]
     p0 <- DimPlot(pbmc, reduction = "tsne", group.by = name, pt.size = 0.9)
 
@@ -164,3 +167,6 @@ dev.off()
 pdf(str_c(outputpath,"_3.3.ElbowPlot.pdf"))
 ElbowPlot(immune.combined)
 dev.off()
+
+
+sessionInfo()
