@@ -24,8 +24,8 @@ cellnumber_summary <- function(rds, rds2, sample_labels, sample_groups, celltype
     	sample_label_cell_num <- c()
     	cellratio_in_sample_label <- c()
     	for(sample_label_i in sample_label_list){
-            sample_label_cell_num <- c(sample_label_cell_num, length(grep(str_c('^', sample_label_i, '_'), cellnum_in_cluster)))
-    		cellratio_in_sample_label <- c(cellratio_in_sample_label, length(grep(str_c('^', sample_label_i, '_'), cellnum_in_cluster))/table(rds2$sample_label)[sample_label_i])
+            sample_label_cell_num <- c(sample_label_cell_num, length(grep(str_c('^', sample_label_i, '_[A-Z0-9]'), cellnum_in_cluster)))
+    		cellratio_in_sample_label <- c(cellratio_in_sample_label, length(grep(str_c('^', sample_label_i, '_[A-Z0-9]'), cellnum_in_cluster))/table(rds2$sample_label)[sample_label_i])
       }
     	cellnumber <- rbind(cellnumber, sample_label_cell_num)
     	cellratio_in_sample <- rbind(cellratio_in_sample, cellratio_in_sample_label)
@@ -61,8 +61,9 @@ cellnumber_summary <- function(rds, rds2, sample_labels, sample_groups, celltype
     # colors=c('grey','#4c85bb','red','#FB6A4A')
     p4 <- ggplot(df3_trans, aes(x=celltype, y=value100, fill=group)) + 
       geom_bar(stat="identity", position=position_dodge()) +
-      geom_errorbar(aes(ymin=ifelse(value100-sd<0, 0 ,value100-sd ), ymax=value100+sd), width=.2, position=position_dodge(.9))+
-      scale_fill_manual(values=group_colors)+ theme(legend.position='bottom')+theme_classic()+theme(legend.position='right', axis.text.x = element_text(angle = 45,vjust = 1,hjust = 1))
+      # geom_errorbar(aes(ymin=ifelse(value100-sd<0, 0 ,value100-sd ), ymax=value100+sd), width=.2, position=position_dodge(.9))+
+      scale_fill_manual(values=group_colors)+ theme(legend.position='bottom')+
+      theme_classic()+theme(legend.position='right', axis.text.x = element_text(angle = 45,vjust = 1,hjust = 1)) + ylab('Percentage (%)')
     # p4 <- ggplot(data=df3, aes(x=group, y=value100, fill=celltype)) + geom_bar(stat="identity")+theme_classic()+ylab('Percentage (%)')+
     #       scale_fill_manual(values=colors) + theme(legend.position='right')
     ggsave(str_c("./", name, "cellsratio_InAnnotationClusters.barplot3.pdf"), p4, width=10, height=4)

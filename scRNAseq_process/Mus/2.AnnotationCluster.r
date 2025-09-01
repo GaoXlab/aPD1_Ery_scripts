@@ -14,8 +14,8 @@ library(reshape2)
 library(ggsci)
 dtVar <- Sys.Date() 
 dtVar <- as.Date(dtVar, tz="UTC")
-source('aPD1_Ery_scripts/scRNAseq_process/Mus/stat.r')
-workpath <- "aPD1_Ery_scripts/scRNAseq_process/Mus/"
+source('./stat.r') # aPD1_Ery_scripts/scRNAseq_process/Mus
+workpath <- "./3.combination/Spleen/" # aPD1_Ery_scripts/scRNAseq_process/Mus/
 setwd(workpath)
 
 rdsfile <- str_c("./Spleen_t-SNE_20PCA_0.6Resolution/Spleen_t-SNE_20PCA_0.6Resolution.rds")
@@ -46,37 +46,38 @@ ggsave(str_c('supFig1.Spleen_SeuratClusters.dotplot.',dtVar,'.original.bm.pdf'),
 table(immune.combined$seurat_clusters)
 table(immune.combined$seurat_clusters)
 immune.combined$celltype = dplyr::case_when(
-  immune.combined$seurat_clusters %in% c(0,2,4,17,7) ~ "B",
+  immune.combined$seurat_clusters %in% c(0,2,4,17,7) ~ "B cell",
   immune.combined$seurat_clusters %in% c(15) ~ "Plasma cell",
-  immune.combined$seurat_clusters %in% c(1,5) ~ "CD4 T",
-  immune.combined$seurat_clusters %in% c(3,6,8) ~ "CD8 T",
-  immune.combined$seurat_clusters %in% c(12) ~ "NK T",  
-  immune.combined$seurat_clusters %in% c(9) ~ "NK",
+  immune.combined$seurat_clusters %in% c(1,5) ~ "CD4 T cell",
+  immune.combined$seurat_clusters %in% c(3,6,8) ~ "CD8 T cell",
+  immune.combined$seurat_clusters %in% c(12) ~ "NK T cell",  
+  immune.combined$seurat_clusters %in% c(9) ~ "NK cell",
   immune.combined$seurat_clusters %in% c(13) ~ "Monocyte",
   immune.combined$seurat_clusters %in% c(14,21) ~ "Neutrophil",
   immune.combined$seurat_clusters %in% c(10) ~ "Macrophage",
   immune.combined$seurat_clusters %in% c(11,16,19) ~ "DC",
   immune.combined$seurat_clusters %in% c(20) ~ "Basophil",
-  immune.combined$seurat_clusters %in% c(18) ~ "Erythroid Prog.")
+  immune.combined$seurat_clusters %in% c(18) ~ "CD34+Kit+ Progenitor cell")
 table(immune.combined$celltype)
 
-marjor_cluster <- c('CD4 T','CD8 T', 'B', 'NK','NK T', 'Monocyte','Neutrophil','Macrophage','DC', 'Basophil', "Erythroid Prog.","Plasma cell")
+marjor_cluster <- c('CD4 T cell','CD8 T cell', 'B cell', 'NK cell','NK T cell', 'Monocyte','Neutrophil','Macrophage','DC', 'Basophil', "CD34+Kit+ Progenitor cell","Plasma cell")
 immune.combined$celltype <- factor(immune.combined$celltype, levels = marjor_cluster)
 
 Idents(immune.combined) = 'celltype'
 p1 <- DimPlot(immune.combined, reduction = "tsne", label = TRUE, label.size = 4, repel=TRUE, cols=c(pal_nejm(alpha = 0.2)(8), '#7E6148E5', '#B09C85E5', pal_npg(alpha=0.2)(2), 'grey'))+theme_bw() +
       theme(legend.position="bottom")#+ NoLegend()
 ggsave(str_c('supFig2.Spleen_Anno1_SeuratClusters.',dtVar,'.pdf'), p1, width=5.5, height=5.5)
-p1 <- DotPlot(immune.combined, features = c('Cd3e','Cd4','Cd8a','Cd19','Cd79a','Nkg7','Klrb1c','Ccr2','Lyz2','Csf1r','Ly6g','Fcgr3','Cxcr2','Il1b','Arg2','Adgre1','Spic','Mrc1','Itgax','Siglech','Bst2','Clec9a','Sirpa','Fcer1a','Cpa3','Fcer1g','Cst3','Kit','Cd34','Mpo','Hlf','Gata1','Klf1','Sox6','Epor','Hemgn','Tfrc','Ptprc','Sdc1','Tnfrsf17'), dot.scale = 3, col.min=-1, cols=c('white','red','red4')) + RotatedAxis() +theme(axis.text.x=element_text(angle = 90,  hjust = 1, vjust = .5))
+p1 <- DotPlot(immune.combined, features = c('Cd3e','Cd4','Cd8a','Cd19','Cd79a','Nkg7','Klrb1c','Ccr2','Lyz2','Csf1r','Ly6g','Fcgr3','Cxcr2','Il1b','Arg2','Adgre1','Spic','Mrc1','Itgax','Siglech','Bst2','Clec9a','Sirpa','Fcer1a','Cpa3','Fcer1g','Cst3','Kit','Cd34','Mpo','Hlf','Gata1','Klf1','Sox6','Epor','Hemgn','Tfrc','Ptprc','Sdc1','Tnfrsf17'), dot.scale = 3, col.min=-1, cols=c('white','red','red4')) + 
+      RotatedAxis() +theme_bw()+theme(axis.text.x=element_text(angle = 90,  hjust = 1, vjust = .5), panel.grid=element_blank())
 ggsave(str_c('supFig2.Spleen_Anno1_SeuratClusters.dotplot_removeRedu.',dtVar,'.pdf'), p1, width=10, height=4)
 
 # 2. Calculating Cell numbers and ratio
-source('./stat.r')
+# source('./stat.r')
 rds = immune.combined
 rds2 = immune.combined
 sample_labels = c('IgG_mEry','aPD1','aPD1_mEry')
 colors = c(pal_nejm(alpha = 0.2)(8), '#7E6148E5', '#B09C85E5', pal_npg(alpha=0.2)(2), 'grey')
-group_colors = c('grey','#A9B8C6', '#0E5F98FF', 'red4')
+group_colors = c('#A9B8C6', '#0E5F98FF', 'red4')
 cellnumber_summary(rds, rds2, sample_labels, sample_labels, marjor_cluster, colors, group_colors, str_c('supFig2.Spleen_',dtVar))
 
 # 3. cellcycle
@@ -93,3 +94,6 @@ ggsave(str_c('supFig2.Spleen_Anno1_SeuratClusters.cellcycle.',dtVar,'.pdf'), p1,
 ### 保存结果
 Idents(immune.combined) = 'celltype'
 saveRDS(immune.combined, file = str_c("./Spleen_t-SNE_20PCA_0.6Resolution/Spleen_t-SNE_20PCA_0.6Resolution.AnnoManual.rds"))
+
+
+sessionInfo()

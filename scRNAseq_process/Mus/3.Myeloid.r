@@ -17,10 +17,10 @@ library(rlist)
 library(clusterProfiler)
 dtVar <- Sys.Date() 
 dtVar <- as.Date(dtVar, tz="UTC")
-source('aPD1_Ery_scripts/scRNAseq_process/Mus/stat.r')
-
-workpath <- "aPD1_Ery_scripts/scRNAseq_process/Mus/"
+source('./stat.r') # aPD1_Ery_scripts/scRNAseq_process/Mus
+workpath <- "./3.combination/Spleen/" # aPD1_Ery_scripts/scRNAseq_process/Mus/
 setwd(workpath)
+
 dir.create('Myeloidsubset')
 rdsfile <- str_c("./Spleen_t-SNE_20PCA_0.6Resolution/Spleen_t-SNE_20PCA_0.6Resolution.AnnoManual.rds")
 
@@ -83,7 +83,7 @@ ggsave(str_c('./Myeloidsubset/supFig2.Spleen_Myeloid_Anno1_SeuratClusters.dotplo
 rds = pbmc_Myeloid
 rds2 = immune.combined
 sample_labels = c('IgG_mEry','aPD1','aPD1_mEry')
-group_colors = c('grey','#A9B8C6', '#0E5F98FF', 'red4')
+group_colors = c('#A9B8C6', '#0E5F98FF', 'red4')
 colors = c(pal_nejm(alpha = 0.2)(8), '#7E6148E5', '#B09C85E5','grey')
 cellnumber_summary(rds, rds2, sample_labels,sample_labels, marjor_cluster, colors,group_colors,  str_c('./Myeloidsubset/supFig2.Spleen_inTotal_',dtVar))
 # rds2 = pbmc_Myeloid
@@ -161,3 +161,5 @@ pdf('Myeloidsubset/MDSC_cellcycle2.pdf', width=5, height=3)
 plot_grid(p3_1, p3_2, ncol=2)
 dev.off()
 
+
+sessionInfo()

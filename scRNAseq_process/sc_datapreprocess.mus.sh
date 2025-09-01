@@ -12,7 +12,7 @@ module load fftw/3.3.10
 
 ### 1.preprocess
 ### for only single-cell RNA-seq:
-rawdata_path='./'
+rawdata_path="$(pwd)"
 sample="IgG_mEry aPD1 aPD1_mEry"
 for s in $sample
 do
@@ -20,7 +20,7 @@ cellranger count --id=$s --fastqs=$rawdata_path/$s --sample=$s --transcriptome=r
 done
 
 ### 2.quality control (single sample)
-R_script="Rscript/"
+R_script="$(pwd)/Rscript/"
 sample="IgG_mEry aPD1 aPD1_mEry"
 for s in $sample
 do
@@ -31,7 +31,7 @@ done
 
 
 ### 3.combined
-rawdata_path='./Mus/'
+rawdata_path="$(pwd)/Mus/"
 combined="Spleen"
 mkdir $combined
 cd $combined
@@ -44,5 +44,11 @@ sample_names="IgG_mEry,aPD1,aPD1_mEry"
 rds_files="IgG_mEry_raw.rds,aPD1_raw.rds,aPD1_mEry_raw.rds"
 filter_fea="6000,6000,6000"
 filter_mt="8,8,8"
-Rscript ${R_script}/2.IntegratedSamples.Seurat3_PCAselection.dedoublet.r -w ${rawdata_path}/3.combination/$combined -l $sample_names -f $rds_files -u $filter_fea -m $filter_mt -o ${combined} > ${rawdata_path}/3.combination/2.PCAselection.log
-Rscript ${R_script}/CCA_3.Seurat3_tSNEorUMAP.r -w ${rawdata_path}/3.combination/$combined -p 20 -f ${combined}_Origin_Integrated.rds -o ${combined} > ${rawdata_path}/3.combination/3.CCA_p20.log
+Rscript ${R_script}/2.IntegratedSamples.Seurat3_PCAselection.dedoublet.r -w ${rawdata_path}/3.combination/$combined -l $sample_names -f $rds_files -u $filter_fea -m $filter_mt -o ${combined} > ${rawdata_path}/3.combination/$combined/2.PCAselection.log
+Rscript ${R_script}/CCA_3.Seurat3_tSNEorUMAP.r -w ${rawdata_path}/3.combination/$combined -p 20 -f ${combined}_Origin_Integrated.rds -o ${combined} > ${rawdata_path}/3.combination/$combined/3.CCA_p20.log
+
+# annotation
+cd $rawdata_path
+Rscript 2.AnnotationCluster.r
+Rscript 3.Myeloid.r
+Rscript 4.Tcell.r  

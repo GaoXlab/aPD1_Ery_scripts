@@ -15,10 +15,10 @@ library(ggsci)
 dtVar <- Sys.Date() 
 dtVar <- as.Date(dtVar, tz="UTC")
 
-source('aPD1_Ery_scripts/scRNAseq_process/Mus/stat.r')
-
-workpath <- "aPD1_Ery_scripts/scRNAseq_process/Mus/"
+source('./stat.r') # aPD1_Ery_scripts/scRNAseq_process/Mus
+workpath <- "./3.combination/Spleen/" # aPD1_Ery_scripts/scRNAseq_process/Mus/
 setwd(workpath)
+
 dir.create('Tsubset')
 rdsfile <- str_c("./Spleen_t-SNE_20PCA_0.6Resolution/Spleen_t-SNE_20PCA_0.6Resolution.AnnoManual.rds")
 
@@ -31,7 +31,7 @@ ggsave(str_c('./Tsubset/supFig1.Spleen_SeuratClusters.',dtVar,'.checkinput.pdf')
 
 # 1. T细胞亚群细分
 Idents(immune.combined) <- immune.combined$celltype
-pbmc_T <- subset(immune.combined, idents=c('CD4 T', 'CD8 T', 'NK T'))#))
+pbmc_T <- subset(immune.combined, idents=c('CD4 T cell', 'CD8 T cell', 'NK T cell'))#))
 DefaultAssay(pbmc_T) <- "integrated"
 # Run the standard workflow for visualization and clustering
 pbmc_T <- ScaleData(pbmc_T, verbose = FALSE)
@@ -79,12 +79,12 @@ ggsave(str_c('./Tsubset/supFig2.Spleen_T_Anno1_SeuratClusters.dotplot.',dtVar,'.
 rds = pbmc_T
 rds2 = immune.combined
 colors = c(pal_nejm(alpha = 0.2)(8), '#7E6148E5', '#B09C85E5','grey')
-group_colors = c('grey','#A9B8C6', '#0E5F98FF', 'red4')
+group_colors = c('#A9B8C6', '#0E5F98FF', 'red4')
 sample_labels = c('IgG_mEry','aPD1','aPD1_mEry')
 marjor_cluster <- c("CD4 Naive","Central Treg","Effector Treg","CD8 Naive","CD8 Tcm","CD8 Tem","CD8 Te","NKT","Tgd","DN T","DP T")
-cellnumber_summary(rds, rds2, sample_labels,sample_labels, marjor_cluster, colors,group_colors, str_c('supFig2.Spleen_inTotal_',dtVar))
+cellnumber_summary(rds, rds2, sample_labels,sample_labels, marjor_cluster, colors,group_colors, str_c('Tsubset/supFig2.Spleen_inTotal_',dtVar))
 rds2 = pbmc_T
-cellnumber_summary(rds, rds2, sample_labels,sample_labels, marjor_cluster, colors, group_colors,str_c('supFig2.Spleen_inTsubset_',dtVar))
+cellnumber_summary(rds, rds2, sample_labels,sample_labels, marjor_cluster, colors, group_colors,str_c('Tsubset/supFig2.Spleen_inTsubset_',dtVar))
 
 ### 保存文件
 saveRDS(pbmc_T, file = str_c("./Spleen_t-SNE_20PCA_0.6Resolution/Spleen_t-SNE_20PCA_0.6Resolution.AnnoManual.Tsubset.rds"))
@@ -155,3 +155,6 @@ p3_2 <- ggplot(data = phase_df[phase_df$celltype=='CD8 Te', ], aes(x = samplelab
 pdf('Tsubset/CD8TE_cellcycle2.pdf', width=5, height=3)
 plot_grid(p3_1, p3_2, ncol=2)
 dev.off()
+
+
+sessionInfo()
