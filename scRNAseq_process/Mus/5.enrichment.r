@@ -15,10 +15,10 @@ library(org.Mm.eg.db)
 library(rlist)
 dtVar <- Sys.Date() 
 dtVar <- as.Date(dtVar, tz="UTC")
-source('aPD1_Ery_scripts/scRNAseq_process/Rscript/GOHelper.R')
-source('aPD1_Ery_scripts/scRNAseq_process/Rscript/GOCluster.R')
+source('../Rscript/GOHelper.R') # source('aPD1_Ery_scripts/scRNAseq_process/Rscript/GOHelper.R')
+source('../Rscript/GOCluster.R') # source('aPD1_Ery_scripts/scRNAseq_process/Rscript/GOCluster.R')
 
-workpath <- "aPD1_Ery_scripts/scRNAseq_process/Mus/"
+workpath <- "./3.combination/Spleen/" # aPD1_Ery_scripts/scRNAseq_process/Mus/
 setwd(workpath)
 
 pbmc_T = readRDS(str_c("./Spleen_t-SNE_20PCA_0.6Resolution/Spleen_t-SNE_20PCA_0.6Resolution.AnnoManual.Tsubset.rds"))
@@ -60,3 +60,4 @@ GOChord(chord, title="GOChord plot",#标题设置
         ribbon.col=c(rev(colorRampPalette(brewer.pal(9, "Reds"))(15))),limit = c(0,1))#c(pal_nejm(alpha = 0.6)(5))#, pal_lancet ("lanonc",alpha = 0.6) (4))#GO term 颜色设置
 dev.off()
 
+sessionInfo()
