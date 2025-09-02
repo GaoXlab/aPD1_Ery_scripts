@@ -76,6 +76,8 @@ single_sample_dedoublet <- function(inputfile, sample_label, nFeature_RNA_upper_
 	# print("The pbmc object info: ")
     pbmc <- ScaleData(pbmc)
     pbmc <- RunPCA(pbmc)
+    pbmc <- FindNeighbors(pbmc, dims = 1:20)
+    pbmc <- FindClusters(pbmc, resolution = 0.5)
     pbmc <- RunTSNE(pbmc, dims = 1:20)
 
     multiplet_rate <- as.data.frame(rbind(c(0.004,800),c(0.008,1600),c(0.016,3200),c(0.023,4800),c(0.031,6400),c(0.039,8000),c(0.046,9600),c(0.054,11200),c(0.061,12800),c(0.069,14400),c(0.076,16000)))
