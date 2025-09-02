@@ -96,7 +96,7 @@ single_sample_dedoublet <- function(inputfile, sample_label, nFeature_RNA_upper_
 
     ## Run DoubletFinder with varying classification stringencies ----------------------------------------------------------------
     pbmc <- doubletFinder_v3(pbmc, PCs = 1:20, pN = 0.25, pK = 0.09, nExp = nExp_poi, reuse.pANN = FALSE, sct = FALSE)
-	# filer_DFname = colnames(pbmc@meta.data)[grep('DF', colnames(pbmc@meta.data))]
+	# filer_DFname = colnames(pbmc@meta.data)[grep('^pANN_', colnames(pbmc@meta.data))]
     # pbmc <- doubletFinder_v3(pbmc, PCs = 1:20, pN = 0.25, pK = 0.09, nExp = nExp_poi.adj, reuse.pANN = filer_DFname, sct = FALSE)
     name = colnames(pbmc@meta.data)[ncol(pbmc@meta.data)]
     p0 <- DimPlot(pbmc, reduction = "tsne", group.by = name, pt.size = 0.9)

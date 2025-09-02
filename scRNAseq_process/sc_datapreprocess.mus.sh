@@ -44,6 +44,7 @@ sample_names="IgG_mEry,aPD1,aPD1_mEry"
 rds_files="IgG_mEry_raw.rds,aPD1_raw.rds,aPD1_mEry_raw.rds"
 filter_fea="6000,6000,6000"
 filter_mt="8,8,8"
+# Because the integrated dataset contained clusters annotated as “unknown,” we adopted a more relaxed strategy by removing doublets based on the theoretical expectation (nExp_poi) without applying homotypic adjustment. Validation analyses indicated that this approach did not affect the overall proportion of major cell populations. 
 Rscript ${R_script}/2.IntegratedSamples.Seurat3_PCAselection.dedoublet.r -w ${rawdata_path}/3.combination/$combined -l $sample_names -f $rds_files -u $filter_fea -m $filter_mt -o ${combined} > ${rawdata_path}/3.combination/$combined/2.PCAselection.log
 Rscript ${R_script}/CCA_3.Seurat3_tSNEorUMAP.r -w ${rawdata_path}/3.combination/$combined -p 20 -f ${combined}_Origin_Integrated.rds -o ${combined} > ${rawdata_path}/3.combination/$combined/3.CCA_p20.log
 
