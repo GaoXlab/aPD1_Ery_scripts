@@ -16,7 +16,7 @@ rawdata_path="$(pwd)"
 sample="IgG_mEry aPD1 aPD1_mEry"
 for s in $sample
 do
-cellranger count --id=$s --fastqs=$rawdata_path/$s --sample=$s --transcriptome=refdata-gex-mm10-2020-A/ --localcores=40
+cellranger count --id=$s --fastqs=$rawdata_path/$s --sample=$s --transcriptome=mm10_HumanizedPD1/ --localcores=40
 done
 
 ### 2.quality control (single sample)
