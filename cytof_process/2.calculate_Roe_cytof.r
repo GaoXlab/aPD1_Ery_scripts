@@ -2,7 +2,7 @@ library(stringr)
 dtVar <- Sys.Date() 
 dtVar <- as.Date(dtVar, tz="UTC")
 
-cytof = read.table('./cytof_cellsinsample.csv', sep=',', head=TRUE, fill=TRUE)
+cytof = read.table(str_c('./cytof_cellsinsample',dtVar,'.csv'), sep=',', head=TRUE, fill=TRUE)
 
 total_cells = apply(cytof, 2, sum)
 total = sum(total_cells)
