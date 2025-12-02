@@ -24,7 +24,7 @@ dtVar <- Sys.Date()
 dtVar <- as.Date(dtVar, tz="UTC")
 
 set.seed(2024)
-setwd('aPD1_Ery_scripts/cytof_process/')
+setwd('./cytof_process/')
 panel_plt_filename <- "CyTOF_panel.xlsx"
 
 p1 = './Data/' ### rawdta
@@ -145,6 +145,7 @@ p <- ggplot(p1_data, aes(x, y, color = celltype))+geom_point(size=0.03)+
     ggrepel::geom_text_repel(data = mini_mpg, aes(label = celltype), colour='black', size=3.5)
 ggsave(str_c('Fig1.Anno_ClustersTSNE.',dtVar,'.pdf'), p, width=5.6, height=3.8)
 write.table(table(p1_data$celltype,p1_data$sample_id),str_c('cytof_cellsinsample',dtVar,'.csv'),sep=',')
+
 
 
 sessionInfo()
